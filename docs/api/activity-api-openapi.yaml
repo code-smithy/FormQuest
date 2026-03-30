@@ -1,0 +1,164 @@
+openapi: 3.1.0
+info:
+  title: Fitness RPG Activity API
+  version: 0.1.0
+  description: Initial Phase 1 API contract for activity ingestion and history.
+servers:
+  - url: https://api.formquest.local
+paths:
+  /activity/ingest:
+    post:
+      summary: Ingest activity events and apply progression updates
+      operationId: ingestActivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              properties:
+                events:
+                  type: array
+                  minItems: 1
+                  items:
+                    $ref: '#/components/schemas/ActivityEvent'
+      responses:
+        '200':
+          description: Ingest processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '400':
+          description: Validation error
+  /activity/history:
+    get:
+      summary: Retrieve normalized activity history
+      operationId: getActivityHistory
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 30
+          required: false
+      responses:
+        '200':
+          description: Paginated activity history
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [events]
+                properties:
+                  next_cursor:
+                    type: string
+                    nullable: true
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActivityHistoryEvent'
+components:
+  schemas:
+    ActivityEvent:
+      type: object
+      required:
+        - source_event_id
+        - type
+        - duration_minutes
+        - calories
+        - occurred_at
+        - source
+      properties:
+        source_event_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          enum: [walking, running, cycling, strength, other]
+        duration_minutes:
+          type: integer
+          minimum: 1
+          maximum: 240
+        calories:
+          type: number
+          minimum: 0
+        steps:
+          type: integer
+          minimum: 0
+          nullable: true
+        heart_rate_avg:
+          type: integer
+          minimum: 0
+          nullable: true
+        occurred_at:
+          type: string
+          format: date-time
+        source:
+          type: string
+          enum: [apple_health, google_fit, manual_import]
+    IngestResponse:
+      type: object
+      required:
+        - accepted
+        - duplicates
+        - quarantined
+        - awarded_xp
+        - awarded_meta_stamina
+        - user
+      properties:
+        accepted:
+          type: integer
+          minimum: 0
+        duplicates:
+          type: integer
+          minimum: 0
+        quarantined:
+          type: integer
+          minimum: 0
+        awarded_xp:
+          type: integer
+          minimum: 0
+        awarded_meta_stamina:
+          type: integer
+          minimum: 0
+        user:
+          type: object
+          required: [xp_total, level, meta_stamina]
+          properties:
+            xp_total:
+              type: integer
+              minimum: 0
+            level:
+              type: integer
+              minimum: 1
+            meta_stamina:
+              type: integer
+              minimum: 0
+              maximum: 5000
+    ActivityHistoryEvent:
+      allOf:
+        - $ref: '#/components/schemas/ActivityEvent'
+        - type: object
+          required: [status, credited_xp, credited_meta_stamina]
+          properties:
+            status:
+              type: string
+              enum: [accepted, duplicate, quarantined]
+            credited_xp:
+              type: integer
+              minimum: 0
+            credited_meta_stamina:
+              type: integer
+              minimum: 0
+            quarantine_reason:
+              type: string
+              nullable: true
