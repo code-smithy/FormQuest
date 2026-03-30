@@ -437,3 +437,5 @@ This MVP is intentionally:
 - Mechanically simple
 - Operationally robust
 - Extensible for live balance and feature expansion
+
+For execution tracking, see the project management docs in `docs/pm/README.md`.
