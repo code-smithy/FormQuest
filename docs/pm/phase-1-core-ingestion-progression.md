@@ -112,3 +112,20 @@ Response fields:
 3. Draft DB migration plan for user/activity fields and idempotency index.
 4. Define quarantine reason codes for anti-cheat triage.
 5. Add M1 execution board links in progress tracker.
+
+
+## Phase 1 Execution Status (Live)
+
+### Completed
+- [x] Step 1: Data contract draft and API schema stubs.
+- [x] Step 2: Ingestion service logic drafted (validation, idempotency, quarantine hooks).
+- [x] Step 3: XP/meta-stamina/progression domain logic implemented.
+- [x] Step 4: Automated tests added (unit + integration).
+
+### Open
+- [ ] Step 5: Replace in-memory repository with Postgres-backed persistence and migrations.
+- [ ] Step 6: Expose HTTP routes (`POST /activity/ingest`, `GET /activity/history`) in a runnable server scaffold.
+- [ ] Step 7: Add CI workflow to run tests and API contract lint checks.
+
+### Phase 1 Completion Gate
+Phase 1 is **not done yet** until Steps 5-7 are complete and M1 exit criteria are fully met.
