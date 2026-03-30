@@ -7,8 +7,8 @@ export class ActivityService {
     this.repo = repo;
   }
 
-  ingest(userId, events) {
-    const user = this.repo.ensureUser(userId);
+  async ingest(userId, events) {
+    const user = await this.repo.ensureUser(userId);
     let accepted = 0;
     let duplicates = 0;
     let quarantined = 0;
@@ -22,17 +22,20 @@ export class ActivityService {
         throw new Error(`validation_error:${schema.reason}`);
       }
 
-      if (this.repo.isDuplicate(event.source_event_id)) {
+      if (await this.repo.isDuplicate(event.source_event_id)) {
         duplicates += 1;
-        this.repo.saveEvent({ ...event, user_id: userId, status: "duplicate", credited_xp: 0, credited_meta_stamina: 0, quarantine_reason: null });
+        await this.repo.saveEvent({ ...event, user_id: userId, status: "duplicate", credited_xp: 0, credited_meta_stamina: 0, quarantine_reason: null });
         continue;
       }
 
-      this.repo.markSourceEventId(event.source_event_id);
+      if (this.repo.markSourceEventId) {
+        this.repo.markSourceEventId(event.source_event_id);
+      }
+
       const quarantineReason = detectQuarantineReason(event);
       if (quarantineReason) {
         quarantined += 1;
-        this.repo.saveEvent({ ...event, user_id: userId, status: "quarantined", credited_xp: 0, credited_meta_stamina: 0, quarantine_reason: quarantineReason });
+        await this.repo.saveEvent({ ...event, user_id: userId, status: "quarantined", credited_xp: 0, credited_meta_stamina: 0, quarantine_reason: quarantineReason });
         continue;
       }
 
@@ -46,10 +49,10 @@ export class ActivityService {
       awarded_xp += xp;
       awarded_meta_stamina += meta;
 
-      this.repo.saveEvent({ ...event, user_id: userId, status: "accepted", credited_xp: xp, credited_meta_stamina: meta, quarantine_reason: null });
+      await this.repo.saveEvent({ ...event, user_id: userId, status: "accepted", credited_xp: xp, credited_meta_stamina: meta, quarantine_reason: null });
     }
 
-    mutableUser = this.repo.saveUser(mutableUser);
+    mutableUser = await this.repo.saveUser(mutableUser);
 
     return {
       accepted,
@@ -65,7 +68,7 @@ export class ActivityService {
     };
   }
 
-  history(userId, { cursor = null, limit = 30 } = {}) {
+  async history(userId, { cursor = null, limit = 30 } = {}) {
     return this.repo.getHistory(userId, limit, cursor ?? 0);
   }
 }

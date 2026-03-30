@@ -17,11 +17,11 @@ function makeEvent(overrides = {}) {
   };
 }
 
-test('ingest accepts valid event and updates user progression', () => {
+test('ingest accepts valid event and updates user progression', async () => {
   const repo = new InMemoryRepo();
   const service = new ActivityService(repo);
 
-  const result = service.ingest('u1', [makeEvent()]);
+  const result = await service.ingest('u1', [makeEvent()]);
   assert.equal(result.accepted, 1);
   assert.equal(result.duplicates, 0);
   assert.equal(result.quarantined, 0);
@@ -29,43 +29,43 @@ test('ingest accepts valid event and updates user progression', () => {
   assert.equal(result.user.xp_total > 0, true);
 });
 
-test('duplicate events are idempotent', () => {
+test('duplicate events are idempotent', async () => {
   const repo = new InMemoryRepo();
   const service = new ActivityService(repo);
 
-  service.ingest('u1', [makeEvent()]);
-  const second = service.ingest('u1', [makeEvent()]);
+  await service.ingest('u1', [makeEvent()]);
+  const second = await service.ingest('u1', [makeEvent()]);
 
   assert.equal(second.accepted, 0);
   assert.equal(second.duplicates, 1);
   assert.equal(second.awarded_xp, 0);
 });
 
-test('suspicious events are quarantined and uncredited', () => {
+test('suspicious events are quarantined and uncredited', async () => {
   const repo = new InMemoryRepo();
   const service = new ActivityService(repo);
 
   const suspicious = makeEvent({ source_event_id: 'evt-2', steps: 20000, duration_minutes: 30 });
-  const result = service.ingest('u1', [suspicious]);
+  const result = await service.ingest('u1', [suspicious]);
 
   assert.equal(result.accepted, 0);
   assert.equal(result.quarantined, 1);
   assert.equal(result.awarded_xp, 0);
 
-  const history = service.history('u1', { limit: 10 });
+  const history = await service.history('u1', { limit: 10 });
   assert.equal(history.events[0].status, 'quarantined');
 });
 
-test('history endpoint returns paginated events', () => {
+test('history endpoint returns paginated events', async () => {
   const repo = new InMemoryRepo();
   const service = new ActivityService(repo);
 
-  service.ingest('u1', [makeEvent({ source_event_id: 'evt-1' })]);
-  service.ingest('u1', [makeEvent({ source_event_id: 'evt-2' })]);
-  service.ingest('u1', [makeEvent({ source_event_id: 'evt-3' })]);
+  await service.ingest('u1', [makeEvent({ source_event_id: 'evt-1' })]);
+  await service.ingest('u1', [makeEvent({ source_event_id: 'evt-2' })]);
+  await service.ingest('u1', [makeEvent({ source_event_id: 'evt-3' })]);
 
-  const page1 = service.history('u1', { limit: 2 });
-  const page2 = service.history('u1', { limit: 2, cursor: page1.next_cursor });
+  const page1 = await service.history('u1', { limit: 2 });
+  const page2 = await service.history('u1', { limit: 2, cursor: page1.next_cursor });
 
   assert.equal(page1.events.length, 2);
   assert.equal(page2.events.length, 1);

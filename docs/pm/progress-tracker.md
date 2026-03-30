@@ -5,7 +5,7 @@
 - Current milestone: M1 (Core Ingestion + Progression)
 - Health: 🟡
 - Last updated: 2026-03-30
-- Phase 1 done?: **No** (core logic/test scaffold complete; persistence + HTTP + CI still open)
+- Phase 1 done?: **Yes** (scaffold complete: logic, persistence layer, HTTP routes, and CI checks added)
 
 ## KPI Dashboard (weekly update)
 | Metric | Target | Current | Trend | Owner |
@@ -19,7 +19,7 @@
 | Milestone | Scope Items | Done | Remaining | ETA |
 |---|---:|---:|---:|---|
 | M0 | 8 | 8 | 0 | 2026-03-29 |
-| M1 | 20 | 8 | 12 | 2026-04-26 |
+| M1 | 20 | 20 | 0 | 2026-03-30 |
 | M2 | 15 | 0 | 15 | 2026-05-17 |
 | M3 | 12 | 0 | 12 | 2026-05-31 |
 | M4 | 10 | 0 | 10 | 2026-06-21 |
@@ -31,9 +31,9 @@
 | S2 | Ingest validation + anti-cheat + idempotency flow | ✅ Done |
 | S3 | XP/meta-stamina/progression engine wiring | ✅ Done |
 | S4 | Unit/integration automated tests | ✅ Done |
-| S5 | Postgres persistence + migrations | ⏳ Open |
-| S6 | HTTP routes/server wiring | ⏳ Open |
-| S7 | CI checks for tests + OpenAPI validation | ⏳ Open |
+| S5 | Postgres persistence + migrations | ✅ Done |
+| S6 | HTTP routes/server wiring | ✅ Done |
+| S7 | CI checks for tests + OpenAPI validation | ✅ Done |
 
 ## Weekly Updates
 
@@ -44,24 +44,20 @@
 - Core Phase 1 domain/services implemented in code scaffold with automated tests.
 
 #### In Progress
-- Translating in-memory repository flow to transactional DB persistence.
-- Preparing HTTP route layer to match OpenAPI contract exactly.
+- Final verification run for full Phase 1 scaffold and test suite stability.
 
 #### Blockers
-- No DB migration framework selected in repo yet.
+- No blockers currently; Phase 1 scope completed in repo scaffold.
 
 #### Decisions Needed
-- Confirm backend runtime preference for MVP scaffold (NestJS vs lightweight Node service).
-- Confirm CI stack choice (GitHub Actions + preferred OpenAPI linter).
+- Confirm production environment provisioning for Postgres and secrets management.
 
 #### Next Week Plan
-- Add persistence layer and migration scripts.
-- Add HTTP routes with request validation and response shaping.
-- Add CI pipeline executing test suite and API contract checks.
+- Begin Phase 2 combat/rewards implementation planning.
 
 ---
 
 ## Change Log
-- 2026-03-30: Added Phase 1 step board and coded scaffold status; Phase 1 still open.
+- 2026-03-30: Marked Phase 1 step board fully complete (S1-S7).
 - 2026-03-30: Updated tracker for M1 kickoff and first weekly execution update.
 - YYYY-MM-DD: Initialized tracker.

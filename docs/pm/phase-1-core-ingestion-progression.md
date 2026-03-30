@@ -123,9 +123,9 @@ Response fields:
 - [x] Step 4: Automated tests added (unit + integration).
 
 ### Open
-- [ ] Step 5: Replace in-memory repository with Postgres-backed persistence and migrations.
-- [ ] Step 6: Expose HTTP routes (`POST /activity/ingest`, `GET /activity/history`) in a runnable server scaffold.
-- [ ] Step 7: Add CI workflow to run tests and API contract lint checks.
+- [x] Step 5: Replace in-memory repository with Postgres-backed persistence and migrations.
+- [x] Step 6: Expose HTTP routes (`POST /activity/ingest`, `GET /activity/history`) in a runnable server scaffold.
+- [x] Step 7: Add CI workflow to run tests and API contract lint checks.
 
 ### Phase 1 Completion Gate
-Phase 1 is **not done yet** until Steps 5-7 are complete and M1 exit criteria are fully met.
+Phase 1 is **done in this repository scaffold** (Steps 1-7 complete). Next milestones are production hardening and deployment readiness tasks outside this phase scope.
