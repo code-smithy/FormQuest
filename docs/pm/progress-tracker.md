@@ -2,9 +2,9 @@
 
 ## Current Status Snapshot
 - Overall status: 🟡 In Progress
-- Current milestone: M0 (Project Setup)
+- Current milestone: M1 (Core Ingestion + Progression)
 - Health: 🟡
-- Last updated: YYYY-MM-DD
+- Last updated: 2026-03-30
 
 ## KPI Dashboard (weekly update)
 | Metric | Target | Current | Trend | Owner |
@@ -17,31 +17,37 @@
 ## Milestone Burnup
 | Milestone | Scope Items | Done | Remaining | ETA |
 |---|---:|---:|---:|---|
-| M0 | 8 | 0 | 8 | YYYY-MM-DD |
-| M1 | 20 | 0 | 20 | YYYY-MM-DD |
-| M2 | 15 | 0 | 15 | YYYY-MM-DD |
-| M3 | 12 | 0 | 12 | YYYY-MM-DD |
-| M4 | 10 | 0 | 10 | YYYY-MM-DD |
+| M0 | 8 | 8 | 0 | 2026-03-29 |
+| M1 | 20 | 2 | 18 | 2026-04-26 |
+| M2 | 15 | 0 | 15 | 2026-05-17 |
+| M3 | 12 | 0 | 12 | 2026-05-31 |
+| M4 | 10 | 0 | 10 | 2026-06-21 |
 
 ## Weekly Updates
 
-### Week of YYYY-MM-DD
+### Week of 2026-03-30
 #### Wins
-- 
+- M1 phase plan drafted and mapped to P0/P1 backlog dependencies.
+- Draft API contract and execution order documented for ingest/progression.
 
 #### In Progress
-- 
+- Breaking P0-001 through P0-004 into implementation tasks by backend/data stream.
+- Preparing test vectors for XP, meta-stamina, and level progression edge cases.
 
 #### Blockers
-- 
+- No repository code scaffold exists yet for API/service implementation.
 
 #### Decisions Needed
-- 
+- Confirm anti-cheat threshold policy for initial quarantine rules.
+- Confirm DB migration ownership split between backend and data roles.
 
 #### Next Week Plan
-- 
+- Stand up backend service scaffold and OpenAPI contract files.
+- Implement ingest idempotency flow and XP engine with unit tests.
+- Add progression update transaction and history retrieval endpoint.
 
 ---
 
 ## Change Log
+- 2026-03-30: Updated tracker for M1 kickoff and added first weekly execution update.
 - YYYY-MM-DD: Initialized tracker.
