@@ -3,6 +3,7 @@
 This folder contains execution docs for planning, sequencing, and tracking delivery of the Fitness RPG MVP.
 
 ## Documents
+- `phase-1-core-ingestion-progression.md` — execution mapping and implementation starter for M1.
 - `work-breakdown-structure.md` — full WBS by stream and deliverable.
 - `milestones.md` — milestone definitions, dates, and exit criteria.
 - `mvp-backlog.md` — prioritized backlog with acceptance criteria.
