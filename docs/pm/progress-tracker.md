@@ -2,9 +2,9 @@
 
 ## Current Status Snapshot
 - Overall status: 🟡 In Progress
-- Current milestone: M1 (Core Ingestion + Progression)
+- Current milestone: M2 (Combat + Rewards)
 - Health: 🟡
-- Last updated: 2026-03-30
+- Last updated: 2026-03-31
 - Phase 1 done?: **Yes** (scaffold complete: logic, persistence layer, HTTP routes, and CI checks added)
 
 ## KPI Dashboard (weekly update)
@@ -20,7 +20,7 @@
 |---|---:|---:|---:|---|
 | M0 | 8 | 8 | 0 | 2026-03-29 |
 | M1 | 20 | 20 | 0 | 2026-03-30 |
-| M2 | 15 | 0 | 15 | 2026-05-17 |
+| M2 | 15 | 6 | 9 | 2026-05-17 |
 | M3 | 12 | 0 | 12 | 2026-05-31 |
 | M4 | 10 | 0 | 10 | 2026-06-21 |
 
@@ -34,6 +34,17 @@
 | S5 | Postgres persistence + migrations | ✅ Done |
 | S6 | HTTP routes/server wiring | ✅ Done |
 | S7 | CI checks for tests + OpenAPI validation | ✅ Done |
+
+
+## Phase 2 Step Board
+| Step | Description | Status |
+|---|---|---|
+| S1 | Battle domain equations + deterministic RNG | ✅ Done |
+| S2 | Battle service orchestration + stamina cost | ✅ Done |
+| S3 | Win rewards + loss/debuff pipeline | ✅ Done |
+| S4 | Battle HTTP routes and error handling | ✅ Done |
+| S5 | DB migration for battles/debuffs | ✅ Done |
+| S6 | Unit/integration automated tests | ✅ Done |
 
 ## Weekly Updates
 
@@ -53,11 +64,12 @@
 - Confirm production environment provisioning for Postgres and secrets management.
 
 #### Next Week Plan
-- Begin Phase 2 combat/rewards implementation planning.
+- Begin Phase 2 combat/rewards integration validation in staging-like environment.
 
 ---
 
 ## Change Log
+- 2026-03-31: Added initial Phase 2 implementation status (S1-S6 complete in scaffold).
 - 2026-03-30: Marked Phase 1 step board fully complete (S1-S7).
 - 2026-03-30: Updated tracker for M1 kickoff and first weekly execution update.
 - YYYY-MM-DD: Initialized tracker.
