@@ -22,7 +22,7 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-export function createServer(activityService) {
+export function createServer({ activityService, battleService }) {
   return http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     const userId = req.headers['x-user-id'];
@@ -60,6 +60,41 @@ export function createServer(activityService) {
       }
       const result = await activityService.history(userId, { cursor, limit });
       return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && url.pathname === '/battle/start') {
+      try {
+        const body = await readJson(req);
+        const result = await battleService.start(userId, body);
+        return sendJson(res, 200, result);
+      } catch (err) {
+        if (String(err.message).startsWith('validation_error')) {
+          return sendJson(res, 400, { error: err.message });
+        }
+        if (err.message === 'insufficient_meta_stamina') {
+          return sendJson(res, 409, { error: err.message });
+        }
+        if (err.message === 'battle_already_active') {
+          return sendJson(res, 409, { error: err.message });
+        }
+        if (err.message === 'invalid_json') {
+          return sendJson(res, 400, { error: 'invalid_json' });
+        }
+        return sendJson(res, 500, { error: 'internal_error' });
+      }
+    }
+
+    if (req.method === 'GET' && url.pathname.startsWith('/battle/result/')) {
+      try {
+        const battleId = url.pathname.replace('/battle/result/', '');
+        const result = await battleService.result(userId, battleId);
+        return sendJson(res, 200, result);
+      } catch (err) {
+        if (err.message === 'battle_not_found') {
+          return sendJson(res, 404, { error: err.message });
+        }
+        return sendJson(res, 500, { error: 'internal_error' });
+      }
     }
 
     return sendJson(res, 404, { error: 'not_found' });
