@@ -35,14 +35,14 @@ Priority labels:
     - Multi-level-up supported.
     - Stat allocation policy applied.
 
-- [ ] **P0-005** Battle start + deterministic resolution.
+- [x] **P0-005** Battle start + deterministic resolution.
   - Owner: Backend
   - Acceptance criteria:
     - Enforces one active battle per user.
     - Consumes battle cost before resolution.
     - Result reproducible with stored seed.
 
-- [ ] **P0-006** Loss/debuff pipeline.
+- [x] **P0-006** Loss/debuff pipeline.
   - Owner: Backend
   - Acceptance criteria:
     - Loss applies one debuff from pool.

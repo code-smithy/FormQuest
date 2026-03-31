@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Fitness RPG Activity API
-  version: 0.1.0
-  description: Initial Phase 1 API contract for activity ingestion and history.
+  title: Fitness RPG API
+  version: 0.2.0
+  description: Phase 1 + Phase 2 API contract for activity ingestion/history and battle flow.
 servers:
   - url: https://api.formquest.local
 paths:
@@ -66,6 +66,47 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ActivityHistoryEvent'
+  /battle/start:
+    post:
+      summary: Start and resolve a deterministic battle
+      operationId: startBattle
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleStartRequest'
+      responses:
+        '200':
+          description: Battle started and resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleStartResponse'
+        '400':
+          description: Validation error
+        '409':
+          description: Insufficient meta stamina or active battle conflict
+  /battle/result/{battleId}:
+    get:
+      summary: Retrieve persisted battle result by ID
+      operationId: getBattleResult
+      parameters:
+        - in: path
+          name: battleId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Battle result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleRecord'
+        '404':
+          description: Battle not found
 components:
   schemas:
     ActivityEvent:
@@ -162,3 +203,109 @@ components:
             quarantine_reason:
               type: string
               nullable: true
+    BattleStartRequest:
+      type: object
+      properties:
+        zone_id:
+          type: integer
+          minimum: 1
+          default: 1
+    BattleStartResponse:
+      type: object
+      required:
+        - battle_id
+        - result
+        - gold_reward
+        - damage_dealt
+        - damage_taken
+        - enemy_power
+        - meta_stamina_spent
+        - user
+      properties:
+        battle_id:
+          type: string
+          format: uuid
+        result:
+          type: string
+          enum: [win, loss]
+        gold_reward:
+          type: integer
+          minimum: 0
+        damage_dealt:
+          type: integer
+          minimum: 0
+        damage_taken:
+          type: integer
+          minimum: 0
+        enemy_power:
+          type: integer
+          minimum: 1
+        meta_stamina_spent:
+          type: integer
+          const: 100
+        debuff:
+          $ref: '#/components/schemas/DebuffEffect'
+          nullable: true
+        user:
+          type: object
+          required: [meta_stamina, gold]
+          properties:
+            meta_stamina:
+              type: integer
+              minimum: 0
+            gold:
+              type: integer
+              minimum: 0
+    DebuffEffect:
+      type: object
+      required: [type, value_pct, duration_hours]
+      properties:
+        type:
+          type: string
+          enum: [fatigue, injury, sluggish]
+        value_pct:
+          type: integer
+        duration_hours:
+          type: integer
+          minimum: 1
+    BattleRecord:
+      type: object
+      required:
+        - id
+        - user_id
+        - zone_id
+        - result
+        - meta_stamina_spent
+        - damage_dealt
+        - damage_taken
+        - gold_reward
+        - seed
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+        zone_id:
+          type: integer
+        result:
+          type: string
+          enum: [win, loss]
+        meta_stamina_spent:
+          type: integer
+        damage_dealt:
+          type: integer
+        damage_taken:
+          type: integer
+        gold_reward:
+          type: integer
+        seed:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+          nullable: true
