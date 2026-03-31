@@ -27,3 +27,10 @@ Out of scope for this phase:
 - [x] Added HTTP endpoints for battle start/result.
 - [x] Added migration for `battles` and `debuffs` tables.
 - [x] Added unit + HTTP integration tests for battle flow.
+
+
+## Remaining to Close M2
+1. Run Postgres-backed staging verification for `POST /battle/start` and `GET /battle/result/:battleId` after applying migration 002.
+2. Execute concurrent start-battle checks to validate the one-active-battle invariant under load.
+3. Capture battle p95 latency and reliability evidence for milestone signoff packet.
+4. Obtain Product + QA signoff that M2 exit criteria are met.
