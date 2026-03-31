@@ -56,6 +56,11 @@ export class InMemoryRepo {
   }
 
   createBattleDraft(battle) {
+    const active = this.getActiveBattle(battle.user_id);
+    if (active) {
+      throw new Error('battle_already_active');
+    }
+
     this.battles.set(battle.id, {
       ...battle,
       result: null,

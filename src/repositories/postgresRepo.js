@@ -122,11 +122,18 @@ export class PostgresRepo {
   }
 
   async createBattleDraft(battle, client = this.pool) {
-    await client.query(
-      `INSERT INTO battles (id, user_id, zone_id, seed, meta_stamina_spent)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [battle.id, battle.user_id, battle.zone_id, battle.seed, battle.meta_stamina_spent],
-    );
+    try {
+      await client.query(
+        `INSERT INTO battles (id, user_id, zone_id, seed, meta_stamina_spent)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [battle.id, battle.user_id, battle.zone_id, battle.seed, battle.meta_stamina_spent],
+      );
+    } catch (err) {
+      if (err.code === '23505' && String(err.constraint).includes('idx_battles_one_active_per_user')) {
+        throw new Error('battle_already_active');
+      }
+      throw err;
+    }
   }
 
   async finalizeBattle(battle, client = this.pool) {

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS battles (
 
 CREATE INDEX IF NOT EXISTS idx_battles_user_created_at ON battles(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_battles_user_resolved ON battles(user_id, resolved_at);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_battles_one_active_per_user ON battles(user_id) WHERE resolved_at IS NULL;
 
 CREATE TABLE IF NOT EXISTS debuffs (
   id UUID PRIMARY KEY,

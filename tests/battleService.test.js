@@ -46,3 +46,23 @@ test('battle result fetch returns stored record', async () => {
   assert.equal(battle.id, started.battle_id);
   assert.equal(['win', 'loss'].includes(battle.result), true);
 });
+
+
+test('battle start fails when unresolved active battle exists', async () => {
+  const repo = new InMemoryRepo();
+  const service = new BattleService(repo);
+
+  const user = repo.ensureUser('u-battle-4');
+  user.meta_stamina = 500;
+  repo.saveUser(user);
+
+  repo.createBattleDraft({
+    id: 'existing-active-battle',
+    user_id: 'u-battle-4',
+    zone_id: 1,
+    seed: 111,
+    meta_stamina_spent: 100,
+  });
+
+  await assert.rejects(() => service.start('u-battle-4', { zone_id: 1 }), /battle_already_active/);
+});

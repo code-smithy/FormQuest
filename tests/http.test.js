@@ -131,3 +131,17 @@ test('battle endpoints start and fetch battle result', async () => {
     await new Promise((resolve) => server.close(resolve));
   }
 });
+
+
+test('GET /battle/result/:id returns 404 for unknown battle', async () => {
+  const { server, base } = await makeApp();
+  try {
+    const res = await fetch(`${base}/battle/result/00000000-0000-0000-0000-000000000000`, {
+      headers: { 'x-user-id': 'u-http-404' },
+    });
+
+    assert.equal(res.status, 404);
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
